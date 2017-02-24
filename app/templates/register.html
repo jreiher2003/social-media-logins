@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Register New User{% endblock %}
+{% block content %}
+{% from "_macros.html" import render_field_with_errors, render_field %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <h1 class="text-center">Register</h1>
+        <hr>
+        <form id="userForm" action="{{ url_for('register') }}" method="POST" name="register_user_form" onsubmit="return checkForm(this);">
+          {{ form.csrf_token }}
+          <div class="form-group">
+            {{ render_field_with_errors(form.username, class="form-control", placeholder="username...", **{'data-validation':'required','data-validation':'length', 'data-validation-length':'min4', 'data-validation-error-msg':'Pick a longer username'}) }}
+          </div>
+          <div class="form-group">
+            {{ render_field_with_errors(form.email, class="form-control", placeholder="you@example.com", **{'data-validation':'email','data-validation-error-msg':'Enter a valid email address, name@domain.com', 'autocomplete': 'email'}) }}
+          </div>
+          <div class="form-group">
+            {{ render_field_with_errors(form.password, class="form-control", placeholder="password...", **{'data-validation':'strength','data-validation-strength':'1', 'data-validation':'length', 'data-validation-length': 'min6'}) }}
+          </div>
+          <div class="form-group">
+            {{ render_field_with_errors(form.password_confirm, class="form-control", placeholder="confirm password...", **{'data-validation': 'confirmation', 'data-validation-confirm':'password'}) }}
+          </div>
+          <div class="form-group">
+            {{ render_field(form.submit, class="btn btn-primary btn-block") }}
+          </div>
+        </form>
+        <hr>
+        <li class="text-muted">Already have an account? <a href="{{ url_for('login') }}">Login</a></li>
+      </div>
+      <br>
+       <p><a href="{{ url_for('oauth_authorize', provider='facebook') }}">Login with Facebook</a></p>
+       <p><a href="{{ url_for('oauth_authorize', provider='twitter') }}">Login with Twitter</a></p>
+      </div>
+    </div>
+  </div>
+  
+  {% endblock %}

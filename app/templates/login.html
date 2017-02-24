@@ -1,0 +1,34 @@
+{% extends "base.html" %} 
+{% block title %}Login{% endblock %}
+{% block content %}
+
+{% from "_macros.html" import render_field_with_errors, render_field %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <form id="userForm" action="{{ url_for('login') }}" method="POST" name="login_user_form" onsubmit="return checkForm(this);">
+          {{ form.csrf_token }}
+          <div class="form-group">
+            {{ render_field_with_errors(form.email, class="form-control", placeholder="email address...", **{'data-validation':'required'}) }}
+          </div>
+          <div class="form-group">
+            {{ render_field_with_errors(form.password, class="form-control", placeholder="password...", **{'data-validation':'required'}) }}
+          </div>
+          <div class="form-group">
+            {{ render_field_with_errors(form.remember) }}<!-- <label for="remember">&nbsp;Remember me&nbsp; </label> -->
+            <li class="pull-right"><a href="{{ url_for('forgot_password') }}">Forgot password</a><br/></li>
+          </div>
+          <div class="form-group">
+            {{ render_field(form.submit, class="btn btn-primary btn-block") }}
+          </div>
+        </form>
+        <hr>
+        <li class="text-muted">Not registered? <a href="{{ url_for('register') }}">Create an account</a><br/></li>
+      </div>
+      <br>
+       <p><a href="{{ url_for('oauth_authorize', provider='facebook') }}">Login with Facebook</a></p>
+        <p><a href="{{ url_for('oauth_authorize', provider='twitter') }}">Login with Twitter</a></p>
+    </div>
+  </div>
+</div>
+  {% endblock %}
