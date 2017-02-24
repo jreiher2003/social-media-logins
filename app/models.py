@@ -1,7 +1,7 @@
 import os
 import datetime
 from app import db,bcrypt
-
+from sqlalchemy import DDL, event
 from sqlalchemy.ext.hybrid import hybrid_property
 
 class Profile(db.Model):
@@ -69,3 +69,25 @@ class TwitterAccount(db.Model):
     profile_id = db.Column(db.Integer, db.ForeignKey('profile.id', ondelete='CASCADE'), index=True)
     profile_tw = db.relationship('Profile', back_populates="twitter_profile")
     
+class AsyncOperationStatus(db.Model):
+    __tablename__ = 'async_operation_status'
+    id = db.Column(db.Integer, primary_key=True)
+    code = db.Column('code', db.String(20), nullable=True)
+
+class AsyncOperation(db.Model):
+    __tablename__ = 'async_operation'
+    id = db.Column(db.Integer, primary_key=True)
+    async_operation_status_id = db.Column(db.Integer, db.ForeignKey(AsyncOperationStatus.id))
+    status = db.relationship('AsyncOperationStatus', foreign_keys=async_operation_status_id)
+
+    facebook_account_id = db.Column(db.Integer, db.ForeignKey(FacebookAccount.id))
+    facebook_account = db.relationship("FacebookAccount", foreign_keys=facebook_account_id)
+
+    twitter_account_id = db.Column(db.Integer, db.ForeignKey(TwitterAccount.id))
+    twitter_account = db.relationship("TwitterAccount", foreign_keys=twitter_account_id)
+
+event.listen(
+    AsyncOperationStatus.__table__, 'after_create',
+    DDL(
+            """ INSERT INTO async_operation_status (id,code) VALUES(1,'pending'),(2, 'ok'),(3, 'error'); """)
+)
