@@ -7,28 +7,50 @@
   <div class="row">
     <div class="col-md-4 col-md-offset-4">
       <form id="userForm" action="{{ url_for('login') }}" method="POST" name="login_user_form" onsubmit="return checkForm(this);">
-          {{ form.csrf_token }}
-          <div class="form-group">
-            {{ render_field_with_errors(form.email, class="form-control", placeholder="email address...", **{'data-validation':'required'}) }}
+        {{ form.csrf_token }}
+        <div class="form-group">
+          {{ render_field_with_errors(form.email, class="form-control", placeholder="email address...", **{'data-validation':'required'}) }}
+        </div>
+        <div class="form-group">
+          {{ render_field_with_errors(form.password, class="form-control", placeholder="password...", **{'data-validation':'required'}) }}
+        </div>
+        <div class="form-group">
+          {{ render_field_with_errors(form.remember) }}<!-- <label for="remember">&nbsp;Remember me&nbsp; </label> -->
+          <li class="pull-right"><a href="{{ url_for('forgot_password') }}">Forgot password</a><br/></li>
+        </div>
+        <div class="form-group">
+          {{ render_field(form.submit, class="btn btn-primary btn-block") }}
+        </div>
+      </form>
+      <hr>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-10" style="border-top:1px solid black; padding-top:50px">
+         <p>
+           <a class="btn btn-block btn-social btn-facebook" href="{{ url_for('oauth_authorize', provider='facebook') }}">
+             <span class="fa fa-facebook"></span>
+             Log in with Facebook</a>
+           <a class="btn btn-block btn-social btn-github" href="{{ url_for('oauth_authorize', provider='github') }}">
+              <span class="fa fa-github"></span>
+              Log in with Github</a>
+           <a class="btn btn-block btn-social btn-google" href="{{ url_for('oauth_authorize', provider='google') }}">
+                <span class="fa fa-google"></span>
+                Log in with Google</a>
+           <a class="btn btn-block btn-social btn-linkedin" href="{{ url_for('oauth_authorize', provider='linkedin') }}">
+                  <span class="fa fa-linkedin"></span>
+                  Log in with LinkedIn</a>
+           <a class="btn btn-block btn-social btn-twitter" href="{{ url_for('oauth_authorize', provider='twitter') }}">             <span class="fa fa-linkedin"></span>
+                    Login with Twitter</a>
+          </p>
+
           </div>
-          <div class="form-group">
-            {{ render_field_with_errors(form.password, class="form-control", placeholder="password...", **{'data-validation':'required'}) }}
-          </div>
-          <div class="form-group">
-            {{ render_field_with_errors(form.remember) }}<!-- <label for="remember">&nbsp;Remember me&nbsp; </label> -->
-            <li class="pull-right"><a href="{{ url_for('forgot_password') }}">Forgot password</a><br/></li>
-          </div>
-          <div class="form-group">
-            {{ render_field(form.submit, class="btn btn-primary btn-block") }}
-          </div>
-        </form>
-        <hr>
-        <li class="text-muted">Not registered? <a href="{{ url_for('register') }}">Create an account</a><br/></li>
+        </div>
+      <div class="form-group">
+        <div class="col-md-offset-2" style="padding-bottom:50px">
+          <p class="text-muted">Not registered? <a href="{{ url_for('register') }}">Create an account</a></p>
+        </div>
       </div>
-      <br>
-       <p><a href="{{ url_for('oauth_authorize', provider='facebook') }}">Login with Facebook</a></p>
-        <p><a href="{{ url_for('oauth_authorize', provider='twitter') }}">Login with Twitter</a></p>
+
     </div>
   </div>
 </div>
-  {% endblock %}
+        {% endblock %}
